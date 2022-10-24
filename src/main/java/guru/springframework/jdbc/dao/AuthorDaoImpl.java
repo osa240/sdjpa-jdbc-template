@@ -22,7 +22,6 @@ public class AuthorDaoImpl implements AuthorDao {
         String sql = "select author.id as id, first_name, last_name, book.id as book_id, book.isbn, book.publisher, book.title from author\n" +
                 "left outer join book on author.id = book.author_id where author.id = ?";
 
-//        return jdbcTemplate.queryForObject("SELECT * FROM author where id = ?", getRowMapper(), id);
         return jdbcTemplate.query(sql, new AuthorExtractor(), id);
     }
 
@@ -35,6 +34,7 @@ public class AuthorDaoImpl implements AuthorDao {
     public Author saveNewAuthor(Author author) {
         jdbcTemplate.update("INSERT INTO author (first_name,last_name) VALUES (?,?)", author.getFirstName(), author.getLastName());
         Long createdId = jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Long.class);
+
         return this.getById(createdId);
     }
 
@@ -53,4 +53,17 @@ public class AuthorDaoImpl implements AuthorDao {
     private RowMapper<Author> getRowMapper() {
         return new AuthorMapper();
     }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
